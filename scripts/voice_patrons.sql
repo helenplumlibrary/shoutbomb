@@ -1,4 +1,4 @@
-SELECT barcode, substring(regexp_replace(phone_number,'\D','','g'), 0, 11) as phone
+SELECT substring(regexp_replace(phone_number,'\D','','g'), 0, 11) as phone, barcode
 FROM sierra_view.patron_view as patron
 JOIN sierra_view.patron_record_phone as phone
 ON patron.id = phone.patron_record_id
