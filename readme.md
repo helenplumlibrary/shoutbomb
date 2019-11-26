@@ -1,4 +1,5 @@
 
+Required packages: lftp and postgresql-client
 
 Create a .pgpass password file containing your Sierra database server information, including credentials for an account with SQL access
 Format: hostname:port:database:username:password
