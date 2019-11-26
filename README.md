@@ -1,18 +1,16 @@
+# Shoutbomb Script
+This bash script can be used to extract data from the Sierra ILS PostgreSQL database and transfer it to Shoutbomb for phone notifications.
+  
+## Requirements
+The script depends on [psql](https://www.postgresql.org/docs/current/app-psql.html) to query PostgreSQL and [lftp](http://lftp.tech/) for FTPS transfers.
 
-Required packages: lftp and postgresql-client
+You will also need a Sierra account with [SQL privileges](https://csdirect.iii.com/sierrahelp/Default.php#ssql/ssql_getting_started.html). 
+  
+## Setup
+1. Create a [.pgpass](http://www.postgresql.org/docs/current/static/libpq-pgpass.html) password file containing your Sierra database server information and credentials. Example:
+`sierra-db.helenplum.org:1032:iii:shoutbomb:PASSWORD`
+  
+1. Create an lftp bookmark names ShoutbombFTP containing your FPT credentials ftp.shoutbomb.com:
+`lftp -c "bookmark add ShoutbombFTP ftps://USERNAME:PASSWORD@ftp.shoutbomb.com"`
 
-Create a .pgpass password file containing your Sierra database server information, including credentials for an account with SQL access
-Format: hostname:port:database:username:password
-Example: sierra-db.helenplum.org:1032:iii:shoutbomb:PASSWORD
-
-[LINK TO CSDIRECT DOCUMENTATION]
-
-
-On Unix systems, the permissions on .pgpass must disallow any access to world or group; achieve this by the command chmod 0600 ~/.pgpass. If the permissions are less strict than this, the file will be ignored. On Microsoft Windows, it is assumed that the file is stored in a directory that is secure, so no special permissions check is made.
-See the PostgreSQL documentation for more information: https://www.postgresql.org/docs/9.6/libpq-pgpass.html
-
-
-Create an lftp bookmark names ShoutbombFTP containing your FPT credentials ftp.shoutbomb.com:
-lftp -c "bookmark add ShoutbombFTP ftps://USERNAME:PASSWORD@ftp.shoutbomb.com"
-
-
+1. Schedule a cron job to run `shoutbomb.sh` at least once per day.
