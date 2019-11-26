@@ -20,6 +20,9 @@ set ftps:initial-prot ""
 set ftp:ssl-force true
 set ftp:ssl-protect-data true
 open ShoutbombFTP
+mput -O Holds holds/*
+mput -O Overdue overdues/*
+mput -O Renew renewals/*
 mput -O text_patrons text_patrons/*
 mput -O voice_patrons voice_patrons/*
 exit
