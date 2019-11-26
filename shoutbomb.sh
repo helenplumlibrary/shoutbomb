@@ -5,8 +5,8 @@ date=$(date '+%Y%m%d')
 
 # Replace the hostname and username below as appropriate for your institution.
 # The password for is saved in the .pgpass password file. See readme.md for more information.
-psql -h sierra-db.helenplum.org -p 1032 -d iii -U shoutbomb -f shoutbomb_text.sql -o shoutbomb_text_$date.txt
-psql -h sierra-db.helenplum.org -p 1032 -d iii -U shoutbomb -f shoutbomb_voice.sql -o shoutbomb_voice_$date.txt
+psql -h sierra-db.helenplum.org -p 1032 -d iii -U shoutbomb -f ./scripts/shoutbomb_text.sql -o ./text_patrons/text_patrons_$date.txt
+psql -h sierra-db.helenplum.org -p 1032 -d iii -U shoutbomb -f ./scripts/shoutbomb_voice.sql -o ./voice_patrons/voice_patrons_$date.txt
 
 
 # This script uses an lftp bookmark names ShoutbombFTP with a saved username and password.
@@ -17,11 +17,11 @@ set ftps:initial-prot ""
 set ftp:ssl-force true
 set ftp:ssl-protect-data true
 open ShoutbombFTP
-put -O text_patrons shoutbomb_text_$date.txt
-put -O voice_patrons shoutbomb_voice_$date.txt
+mput -O text_patrons text_patrons/*
+mput -O voice_patrons voice_patrons/*
 exit
 SCRIPT
 
-# Optionally, uncomment the following lines to delete the exported user data after upload.
-#rm shoutbomb_text_$date.txt
-#rm shoutbomb_voice_$date.txt
+# Move uploaded files to the archive
+mv text_patrons/* archive/text_patrons/
+mv voice_patrons/* archive/voice_patrons/
