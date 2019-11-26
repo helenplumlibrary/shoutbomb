@@ -32,5 +32,5 @@ mv renewals/* archive/renewals/
 mv text_patrons/* archive/text_patrons/
 mv voice_patrons/* archive/voice_patrons/
 
-# Optionally, remove archived exports older than 30 days
-#find ./archive/ -type f -name '*.txt' -mtime +30 -exec rm {} \;
+# Remove archived exports older than 30 days
+find ./archive/ -type f -name '*.txt' -mtime +30 -exec rm {} \;
