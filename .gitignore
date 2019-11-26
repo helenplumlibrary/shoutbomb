@@ -1,0 +1,10 @@
+/holds/*
+/overdues/*
+/renewals/*
+/text_patrons/*
+/voice_patrons/*
+/archive/holds/*
+/archive/overdues/*
+/archive/renewals/*
+/archive/text_patrons/*
+/archive/voice_patrons/*
