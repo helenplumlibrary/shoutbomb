@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# Set working directory to script directory
+cd "$(dirname "$0")"
+
 # Create a datestamp for today's day in YYYYMMDD format to be appended to output file names
 date=$(date '+%Y%m%d')
 
