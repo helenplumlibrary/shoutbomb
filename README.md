@@ -1,4 +1,4 @@
-# Helen Plub Library Shoutbomb Scripts
+# Helen Plum Library Shoutbomb Scripts
 This bash script can be used to extract data from the Sierra ILS PostgreSQL database and transfer it to Shoutbomb for phone notifications.
 
 The script handles holds, overdues, renewals, and patron notice preference (SMS text or voice call). The notice type is determined based on the value of the patron's PCODE1 field in Sierra, but `text_patrons.sql` and `voice_patrons.sql` could be modified to look at different fields.
