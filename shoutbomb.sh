@@ -5,8 +5,11 @@ date=$(date '+%Y%m%d')
 
 # Replace the hostname and username below as appropriate for your institution.
 # The password for is saved in the .pgpass password file. See readme.md for more information.
-psql -h sierra-db.helenplum.org -p 1032 -d iii -U shoutbomb -f ./scripts/shoutbomb_text.sql -o ./text_patrons/text_patrons_$date.txt
-psql -h sierra-db.helenplum.org -p 1032 -d iii -U shoutbomb -f ./scripts/shoutbomb_voice.sql -o ./voice_patrons/voice_patrons_$date.txt
+psql -h sierra-db.helenplum.org -p 1032 -d iii -U shoutbomb -f ./scripts/holds.sql -o ./holds/holds_$date.txt
+psql -h sierra-db.helenplum.org -p 1032 -d iii -U shoutbomb -f ./scripts/overdues.sql -o ./overdues/overdues_$date.txt
+psql -h sierra-db.helenplum.org -p 1032 -d iii -U shoutbomb -f ./scripts/renewals.sql -o ./renewals/renewals_$date.txt
+psql -h sierra-db.helenplum.org -p 1032 -d iii -U shoutbomb -f ./scripts/text_patrons.sql -o ./text_patrons/text_patrons_$date.txt
+psql -h sierra-db.helenplum.org -p 1032 -d iii -U shoutbomb -f ./scripts/voice_patrons.sql -o ./voice_patrons/voice_patrons_$date.txt
 
 
 # This script uses an lftp bookmark names ShoutbombFTP with a saved username and password.
@@ -23,5 +26,11 @@ exit
 SCRIPT
 
 # Move uploaded files to the archive
+mv holds/* archive/holds/
+mv overdues/* archive/overdues/
+mv renewals/* archive/renewals/
 mv text_patrons/* archive/text_patrons/
 mv voice_patrons/* archive/voice_patrons/
+
+# Optionally, remove archived exports older than 30 days
+#find ./archive/ -type f -name '*.txt' -mtime +30 -exec rm {} \;
