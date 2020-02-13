@@ -1,5 +1,5 @@
 SELECT
-    trim(regexp_replace(s.content, '(:|/|\.|\||\")', '', 'g')) AS title,
+    trim(regexp_replace(s.content, '(:|/|\.|\||\"|\d{9})', '', 'g')) AS title, -- Remove punctuation or 9-digit OCLC request number (for ILL items)
     to_char(rmi.record_last_updated_gmt,'MM-DD-YYYY') AS last_update, 
     'i' || rmi.record_num || 'a' AS item_no,
     'p' || rmp.record_num || 'a' AS patron_no, 
@@ -17,7 +17,10 @@ SELECT
     JOIN sierra_view.bib_record AS b
       ON ( b.id = bil.bib_record_id )
     JOIN sierra_view.subfield as s
-      ON (s.record_id = b.id AND s.marc_tag = '245' and s.tag = 'a')
+      ON (s.record_id = b.id 
+        AND ((s.marc_tag = '245' and s.tag = 'a') -- Regular item
+        OR (s.field_type_code = 't' and s.marc_tag is null and s.tag is null)) -- ILL virtual item
+        )
     LEFT JOIN sierra_view.varfield AS bt
       ON ( bt.record_id = b.id AND bt.varfield_type_code = 't' AND bt.occ_num = 0 )
     LEFT JOIN sierra_view.varfield AS ic
@@ -28,4 +31,4 @@ SELECT
     h.status in ('b','i')    
     AND i.item_status_code = '!'
     AND h.pickup_location_code Is not null
-  ORDER by patron_no;
+  ORDER by h.record_id desc;

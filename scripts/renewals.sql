@@ -1,16 +1,16 @@
 SELECT
-     'p' || rmp.record_num || 'a'                                   AS patron_no,
-     replace(ib.field_content,' ','')                               AS item_barcode,
-     trim(regexp_replace(s.content, '(:|/|\.|\||\")', '', 'g'))     AS title,
-     to_char(c.due_gmt,'MM-DD-YYYY')                                AS due_date,
-     'i' || rmi.record_num || 'a'                                   AS item_no,
-     round(p.owed_amt,2)                                            AS money_owed,
-     c.loanrule_code_num                                            AS loan_rule,
-     nullif (count(ih.id),0)                                        AS item_holds,
-     nullif (count(bh.id),0)                                        AS bib_holds,
-     c.renewal_count                                                AS renewals,
-     'b' || rmb.record_num || 'a'                                   AS bib_no,
-	 c.id                                                           AS checkout_id
+     'p' || rmp.record_num || 'a'                                     AS patron_no,
+     replace(ib.field_content,' ','')                                 AS item_barcode,
+     trim(regexp_replace(s.content, '(:|/|\.|\||\"|\d{9})', '', 'g')) AS title, -- Remove punctuation or 9-digit OCLC request number (for ILL items)
+     to_char(c.due_gmt,'MM-DD-YYYY')                                  AS due_date,
+     'i' || rmi.record_num || 'a'                                     AS item_no,
+     round(p.owed_amt,2)                                              AS money_owed,
+     c.loanrule_code_num                                              AS loan_rule,
+     nullif (count(ih.id),0)                                          AS item_holds,
+     nullif (count(bh.id),0)                                          AS bib_holds,
+     c.renewal_count                                                  AS renewals,
+     'b' || rmb.record_num || 'a'                                     AS bib_no,
+	 c.id                                                               AS checkout_id
   FROM sierra_view.checkout AS c
      RIGHT JOIN sierra_view.patron_record AS p
        ON ( p.id = c.patron_record_id )
@@ -27,7 +27,10 @@ SELECT
      JOIN sierra_view.bib_record AS b
        ON ( b.id = bil.bib_record_id )
      JOIN sierra_view.subfield AS s
-       ON ( s.record_id = b.id AND s.marc_tag='245' AND s.tag = 'a')
+       ON (s.record_id = b.id 
+        AND ((s.marc_tag = '245' and s.tag = 'a') -- Regular item
+        OR (s.field_type_code = 't' and s.marc_tag is null and s.tag is null)) -- ILL virtual item
+        )
      LEFT JOIN sierra_view.hold as bh
        ON (bh.record_id = b.id) 
      LEFT JOIN sierra_view.hold as ih
