@@ -15,7 +15,7 @@ psql -h sierra-db.helenplum.org -p 1032 -d iii -U shoutbomb -t -A -f ./scripts/t
 psql -h sierra-db.helenplum.org -p 1032 -d iii -U shoutbomb -t -A -f ./scripts/voice_patrons.sql -o ./voice_patrons/voice_patrons_$date.txt
 
 
-# This script uses an lftp bookmark names ShoutbombFTP with a saved username and password.
+# This script uses an lftp bookmark named ShoutbombFTP with a saved username and password.
 # See readme.md for more information.
 lftp <<SCRIPT
 set ssl:verify-certificate no
